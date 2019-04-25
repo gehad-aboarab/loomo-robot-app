@@ -21,7 +21,7 @@ public class LoomoSpeakService {
     private MediaPlayer player;
     private TextToSpeech tts;
 
-    private static final String TAG = "SeniorSucks_Speak";
+    private static final String TAG = "LoomoSpeakService_Tag";
     private Speaker mSpeaker;
     private Context context;
     private LoomoApplication application;

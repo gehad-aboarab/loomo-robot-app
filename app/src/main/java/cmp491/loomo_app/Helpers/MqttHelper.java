@@ -22,7 +22,7 @@ public class MqttHelper {
     private final String subscriptionTopic = "server-to-loomo/#";
     private final String username = "gwvgvrbb";
     private final String password = "HoftA-90m-BL";
-    private final String TAG = "SeniorSucks_Mqtt";
+    private final String TAG = "MqttHelper_Tag";
     private Context context;
 
     public MqttHelper(Application application){

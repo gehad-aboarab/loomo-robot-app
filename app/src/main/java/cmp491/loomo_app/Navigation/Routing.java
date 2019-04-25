@@ -23,7 +23,7 @@ public class Routing {
     private AStarCheckPoint currentCheckPoint;
     private boolean isStarted = false;
     private int journeyType = -1; // When -1 it is not moving
-    public static final String TAG = "Route_Tag";
+    public static final String TAG = "Routing_Tag";
 
     public Routing(LoomoApplication application, LoomoMain activity) {
         this.application = application;

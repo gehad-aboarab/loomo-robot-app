@@ -13,7 +13,7 @@ public class MapInitializer {
     private Destination homeDestination;
     private LoomoMap loomoMap;
     private LoomoApplication loomoApplication;
-    private static final String TAG = "SeniorSucks_MapInit";
+    private static final String TAG = "MapInitializer_Tag";
 
     public Destination getHomeDestination() {
         return homeDestination;

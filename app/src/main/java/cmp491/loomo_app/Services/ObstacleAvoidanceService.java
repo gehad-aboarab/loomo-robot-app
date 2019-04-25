@@ -15,7 +15,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class ObstacleAvoidanceService extends AsyncTask<Object, Void, Float> {
-    private final String TAG = "SeniorSucks_Obstacle";
+    private final String TAG = "ObstacleAvoidanceService_Tag";
     private boolean i = true;
     private LoomoBaseService loomoBaseService;
     private LoomoSpeakService loomoSpeakService;

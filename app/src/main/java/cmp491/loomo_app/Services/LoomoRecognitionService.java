@@ -25,7 +25,7 @@ import cmp491.loomo_app.Helpers.C;
 
 public class LoomoRecognitionService {
 
-    private static final String TAG = "SeniorSucks_Recog";
+    private static final String TAG = "LoomoRecognitionService_Tag";
     private static final String FILE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
     private Recognizer mRecognizer;
     private WakeupListener mWakeupListener; // "OK Loomo"

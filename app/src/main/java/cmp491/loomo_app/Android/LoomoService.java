@@ -6,6 +6,7 @@ import android.os.IBinder;
 
 public class LoomoService extends Service {
     private LoomoMain loomoActivity;
+    private final static String TAG = "LoomoService_Tag";
 
     public LoomoService() { }
 
