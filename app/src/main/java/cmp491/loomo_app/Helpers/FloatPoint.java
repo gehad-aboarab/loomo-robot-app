@@ -1,6 +1,7 @@
 package cmp491.loomo_app.Helpers;
 
 public class FloatPoint {
+    public static final String TAG = "FloatPoint_Tag";
     public float x;
     public float y;
     public float thetha;
