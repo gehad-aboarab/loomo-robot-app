@@ -134,6 +134,12 @@ public class Routing {
                     from.y,
                     application.homeDestination.x,
                     application.homeDestination.y);
+        } else if(journeyType == C.JOURNEY_DOING_TOUR) {
+            route = application.loomoMap.calcRoute(
+                    from.x,
+                    from.y,
+                    application.targetDestination.x,
+                    application.targetDestination.y);
         }
         setCheckPoints(route);
 
@@ -156,13 +162,17 @@ public class Routing {
         application.updateLocation(from);
         try {
             currentCheckPoint = getNextCheckPoint();
+            FloatPoint fp_target = MovementRules.serverToLoomo(currentCheckPoint.getX(), currentCheckPoint.getY(), application.loomoMap.getCellSize());
+            FloatPoint fp_home = MovementRules.serverToLoomo(application.homeDestination.x, application.homeDestination.y, application.loomoMap.getCellSize());
+            activity.loomoBaseService.moveRobot((float) fp_target.x - fp_home.x, (float) fp_target.y - fp_home.y);
         } catch (Exception e) {
             e.printStackTrace();
-            endJourney();
+            if(getJourneyType() == C.JOURNEY_DOING_TOUR){
+                activity.loomoSpeakService.speak(application.currentTourStop.speech, C.UTTERANCE_TOUR_STOP);
+            } else {
+                endJourney();
+            }
         }
-        FloatPoint fp_target = MovementRules.serverToLoomo(currentCheckPoint.getX(), currentCheckPoint.getY(), application.loomoMap.getCellSize());
-        FloatPoint fp_home = MovementRules.serverToLoomo(application.homeDestination.x, application.homeDestination.y, application.loomoMap.getCellSize());
-        activity.loomoBaseService.moveRobot((float) fp_target.x - fp_home.x, (float) fp_target.y - fp_home.y);
     }
 
     public void endJourney(){

@@ -167,21 +167,21 @@ public class AStarMap {
             }
         }
 
-        // Check northwest AStarCheckPoint
-        if (x > 0 && y > 0) {
-            adjacent = getNode(x - 1, y - 1);
-            if (adjacent != null && adjacent.isWalkable() && !closedList.contains(adjacent)) {
-                adjacentAStarCheckPoints.add(adjacent);
-            }
-        }
+//        // Check northwest AStarCheckPoint
+//        if (x > 0 && y > 0) {
+//            adjacent = getNode(x - 1, y - 1);
+//            if (adjacent != null && adjacent.isWalkable() && !closedList.contains(adjacent)) {
+//                adjacentAStarCheckPoints.add(adjacent);
+//            }
+//        }
 
-        // Check northeast AStarCheckPoint
-        if (x < width && y > 0) {
-            adjacent = getNode(x + 1, y - 1);
-            if (adjacent != null && adjacent.isWalkable() && !closedList.contains(adjacent)) {
-                adjacentAStarCheckPoints.add(adjacent);
-            }
-        }
+//        // Check northeast AStarCheckPoint
+//        if (x < width && y > 0) {
+//            adjacent = getNode(x + 1, y - 1);
+//            if (adjacent != null && adjacent.isWalkable() && !closedList.contains(adjacent)) {
+//                adjacentAStarCheckPoints.add(adjacent);
+//            }
+//        }
 
         // Check right AStarCheckPoint
         if (x < width) {
@@ -191,21 +191,21 @@ public class AStarMap {
             }
         }
 
-        // Check southwest AStarCheckPoint
-        if (x < height && y < width) {
-            adjacent = getNode(x + 1, y + 1);
-            if (adjacent != null && adjacent.isWalkable() && !closedList.contains(adjacent)) {
-                adjacentAStarCheckPoints.add(adjacent);
-            }
-        }
+//        // Check southwest AStarCheckPoint
+//        if (x < height && y < width) {
+//            adjacent = getNode(x + 1, y + 1);
+//            if (adjacent != null && adjacent.isWalkable() && !closedList.contains(adjacent)) {
+//                adjacentAStarCheckPoints.add(adjacent);
+//            }
+//        }
 
-        // Check southeast AStarCheckPoint
-        if (x < height && y > 0) {
-            adjacent = getNode(x + 1, y - 1);
-            if (adjacent != null && adjacent.isWalkable() && !closedList.contains(adjacent)) {
-                adjacentAStarCheckPoints.add(adjacent);
-            }
-        }
+//        // Check southeast AStarCheckPoint
+//        if (x < height && y > 0) {
+//            adjacent = getNode(x + 1, y - 1);
+//            if (adjacent != null && adjacent.isWalkable() && !closedList.contains(adjacent)) {
+//                adjacentAStarCheckPoints.add(adjacent);
+//            }
+//        }
 
         // Check top AStarCheckPoint
         if (y > 0) {

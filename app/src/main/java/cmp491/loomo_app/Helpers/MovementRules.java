@@ -24,11 +24,11 @@ public class MovementRules {
             case -1:
                 switch(dy){
                     case -1:
-                        return C.DIRECTION_SOUTH_WEST;
+                        return C.DIRECTION_SOUTH_EAST;
                     case 0:
                         return C.DIRECTION_SOUTH1;
                     case 1:
-                        return C.DIRECTION_SOUTH_EAST;
+                        return C.DIRECTION_SOUTH_WEST;
                 }
                 break;
             case 0:
@@ -44,11 +44,11 @@ public class MovementRules {
             case 1:
                 switch(dy){
                     case -1:
-                        return C.DIRECTION_NORTH_WEST;
+                        return C.DIRECTION_NORTH_EAST;
                     case 0:
                         return C.DIRECTION_NORTH;
                     case 1:
-                        return C.DIRECTION_NORTH_EAST;
+                        return C.DIRECTION_NORTH_WEST;
                 }
                 break;
         }

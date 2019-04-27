@@ -67,9 +67,6 @@ public class ObstacleAvoidanceService extends AsyncTask<Object, Void, Float> {
                 ultrasonicValue = getAvgUltrasonicValue();
                 // If value is less than threshold
                 if (ultrasonicValue < C.OBSTACLE_ULTRASONIC_DIST_MM || loomoApplication.rpiSensorFront) {
-                    while (ultrasonicValue < 270.0) {
-                        loomoSpeakService.speak("Somebody help me. I cannot move", "");
-                    }
                     // Clear the checkpoints
                     loomoBaseService.clearCheckPoints();
                     // Find out which checkpoint we are currently at
@@ -97,6 +94,10 @@ public class ObstacleAvoidanceService extends AsyncTask<Object, Void, Float> {
                     threadSleep(500);
                     publishProgress();
                     threadSleep(3000);
+                    if (ultrasonicValue < 270.0) {
+                        loomoSpeakService.speak("Somebody help me. I cannot move", "");
+                        threadSleep(500);
+                    }
                 }
                 ultrasonicValue = getAvgUltrasonicValue();
                 loomoApplication.rpiSensorFront = false;
@@ -130,11 +131,14 @@ public class ObstacleAvoidanceService extends AsyncTask<Object, Void, Float> {
     @Override
     protected void onProgressUpdate(Void... aVoid) {
         super.onProgressUpdate();
-        Log.d(TAG, "Starting journey to new route!"+loomoApplication.currentRoute.getJourneyType());
+//        Log.d(TAG, "Starting journey to new route!"+loomoApplication.currentRoute.getJourneyType());
 //        C.log(loomoApplication.mqttHelper.mqttAndroidClient,C.L2S_ADMIN_LOG,"Journey type is: "+loomoApplication.currentRoute.getJOURNEY_TYPE());
         loomoApplication.currentRoute.setStarted(false);
-        if(loomoApplication.currentRoute.getJourneyType()!=-1)
+        try {
             loomoApplication.currentRoute.startJourney(loomoApplication.currentRoute.getJourneyType());
+        }catch(Exception e){
+            Log.d(TAG, "badd journey type");
+        }
     }
 
     @Override

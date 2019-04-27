@@ -26,6 +26,7 @@ import cmp491.loomo_app.Navigation.AStarCheckPoint;
 import cmp491.loomo_app.Navigation.Destination;
 import cmp491.loomo_app.Navigation.MapInitializer;
 import cmp491.loomo_app.Navigation.Routing;
+import cmp491.loomo_app.Navigation.Tours;
 import cmp491.loomo_app.Services.LoomoBaseService;
 import cmp491.loomo_app.Services.LoomoRecognitionService;
 import cmp491.loomo_app.Services.LoomoSpeakService;
@@ -56,6 +57,7 @@ public class LoomoMain {
         this.loomoSpeakService = new LoomoSpeakService(context, speakListener);
         this.loomoRecognitionService = new LoomoRecognitionService(context, recogListener);
         obstacleAvoidanceService = new ObstacleAvoidanceService();
+        setBroadCastReceiver();
         if (application.mqttHelper.mqttAndroidClient.isConnected()) {
             getUpdatedMap();
         }
@@ -187,23 +189,21 @@ public class LoomoMain {
                             break;
                         case C.UTTERANCE_TOUR_STOP:
                             // go to the next tour stop
-//                            try {
-//                                application.currentTourStop = application.tour.getTourStop();
-//                                C.log(application.mqttHelper.mqttAndroidClient,C.L2S_ADMIN_LOG,"Just spoke,before destName: "+application.currentTourStop.destName);
-//                                Position to = application.loomoMap.getLandmarks().get(application.currentTourStop.destName);
-//                                C.log(application.mqttHelper.mqttAndroidClient,C.L2S_ADMIN_LOG,"Just spoke,after destName: "+application.currentTourStop.destName);
-//                                application.finalDestinationName = application.currentTourStop.destName;
-//                                application.targetDestination = new Position();
-//                                application.targetDestination.x = to.x;
-//                                application.targetDestination.y = to.y;
-//                                application.targetDestination.thetha = to.thetha;
-//                                application.targetDestination.mode = C.GUIDE_MODE;
-//                                Log.d(TAG, "onServiceInteraction: poss: " + to.x + to.y);
-//                                startJourney(Route.JOURNEY_DOING_TOUR);
-//                            } catch (Exception ex) {
-//                                C.log(application.mqttHelper.mqttAndroidClient,C.L2S_ADMIN_LOG,"Tour has ended: "+ex.getMessage());
-//                                endJourney();
-//                            }
+                            try {
+                                application.loomoMap.removeTempObstacles();
+                                application.currentTourStop = application.currentTour.getTourStop();
+
+                                String tourStopName = application.currentTourStop.destName;
+
+                                // Get the destination coordinates
+                                Destination tourStop = application.loomoMap.getLandmarks().get(tourStopName);
+                                application.targetDestinationName = application.currentTourStop.destName;
+                                application.targetDestination = tourStop;
+
+                                mqttStartJourney();
+                            } catch (Exception ex) {
+                                application.currentRoute.endJourney();
+                            }
                             break;
                     }
                     break;
@@ -279,16 +279,17 @@ public class LoomoMain {
 
                             break;
                         case C.S2L_SEND_TOUR:
-//                            try {
-//                                application.tour = new LoomoTours(obj.getJSONObject("tour"),application);
-//                            } catch (Exception e) {
-//                                Log.d(TAG, "No tours available");
-//                            }
+                            try {
+                                application.currentTour = new Tours(obj.getJSONObject("tour"),application);
+                            } catch (Exception e) {
+                                Log.d(TAG, "No tours available");
+                            }
                             break;
                         // If loomo called, switch state to unavailable and retrieve the user's coordinates
                         case C.S2L_LOOMO_CALLED:
                             Log.d(TAG, "current state when loomo called: " + application.currentState);
                             if (application.currentState == C.BOUND_TOWARDS_USER) {
+                                loomoSpeakService.speak("already in journey","");
                                 Log.d(TAG, "current state when loomo called: " + application.currentState);
                                 break;
                             }
@@ -315,10 +316,14 @@ public class LoomoMain {
 
                             } else {
                                 application.updateCurrentMode(C.TOUR_MODE);
-//                                application.currentTourStop = application.tour.getTourStop();
-//                                Position to = application.loomoMap.getLandmarks().get(application.currentTourStop.destName);
-//                                application.finalDestinationName = application.currentTourStop.destName;
-//                                application.finalDestination = new Position(to.x, to.y, to.thetha, application.GUIDE_MODE);
+                                application.currentTourStop = application.currentTour.getTourStop();
+
+                                String tourStopName = application.currentTourStop.destName;
+
+                                // Get the destination coordinates
+                                Destination tourStop = application.loomoMap.getLandmarks().get(tourStopName);
+                                application.targetDestinationName = application.currentTourStop.destName;
+                                application.targetDestination = tourStop;
                             }
 
                             // Get user's coordinates
@@ -374,9 +379,12 @@ public class LoomoMain {
 
             if (application.currentMode == C.RIDE_MODE)
                 loomoSpeakService.speak("Hop on me", "");
-            else {
+            else if (application.currentMode == C.GUIDE_MODE){
                 loomoSpeakService.speak("Let us go to " + application.targetDestinationName, "");
                 application.currentRoute.startJourney(C.JOURNEY_GOING_TO_DESTINATION);
+            } else {
+                loomoSpeakService.speak("Let us go to the next stop", "");
+                application.currentRoute.startJourney(C.JOURNEY_DOING_TOUR);
             }
             // Update server on journey started towards destination
 //            C.log(application.deviceId, application.mqttHelper.mqttAndroidClient, C.L2S_ADMIN_DEST, application.finalDestinationName);

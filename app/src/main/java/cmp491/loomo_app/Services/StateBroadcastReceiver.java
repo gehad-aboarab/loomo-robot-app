@@ -83,7 +83,7 @@ public class StateBroadcastReceiver extends BroadcastReceiver {
         Destination updatedLoc = new Destination();
         updatedLoc.x = application.lastKnownLocation.x + dx;
         updatedLoc.y = application.lastKnownLocation.y + dy;
-        updatedLoc.thetha = application.lastKnownLocation.thetha;
+//        updatedLoc.thetha = application.lastKnownLocation.thetha;
         application.updateLocation(updatedLoc);
     }
 }

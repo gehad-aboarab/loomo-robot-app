@@ -15,6 +15,8 @@ import cmp491.loomo_app.Helpers.MqttHelper;
 import cmp491.loomo_app.Navigation.Destination;
 import cmp491.loomo_app.Navigation.LoomoMap;
 import cmp491.loomo_app.Navigation.Routing;
+import cmp491.loomo_app.Navigation.TourStop;
+import cmp491.loomo_app.Navigation.Tours;
 import cmp491.loomo_app.Services.LoomoBaseService;
 
 public class LoomoApplication extends Application {
@@ -52,7 +54,7 @@ public class LoomoApplication extends Application {
     public String mapData;
     public LoomoMap loomoMap;
     public Routing currentRoute;
-//    public TourStop currentTourStop;
+    public TourStop currentTourStop;
     public int obstCounter = 0;
     public Destination userDestination;
     public Destination targetDestination;
@@ -60,7 +62,7 @@ public class LoomoApplication extends Application {
     public Destination homeDestination;
     public Destination lastKnownLocation;
     public FloatPoint stepOnPose;
-//    public LoomoTours tour;
+    public Tours currentTour;
 
     public boolean rpiSensorFront;
     public boolean rpiSensorRight;
