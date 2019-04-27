@@ -11,6 +11,7 @@ import com.segway.robot.algo.Pose2D;
 import cmp491.loomo_app.Android.LoomoApplication;
 import cmp491.loomo_app.Helpers.C;
 import cmp491.loomo_app.Helpers.FloatPoint;
+import cmp491.loomo_app.Helpers.MovementRules;
 import cmp491.loomo_app.Navigation.Destination;
 import cmp491.loomo_app.Navigation.Routing;
 
@@ -72,9 +73,12 @@ public class StateBroadcastReceiver extends BroadcastReceiver {
     // calculate location from 2 given points
     // supposed to update location of loom in ride mode
     private void calculateLastLocation(FloatPoint from, FloatPoint to) {
-        int dx = Math.round(to.x - from.x);
-        Log.d(TAG, String.valueOf(dx));
-        int dy = Math.round(to.y - from.y);
+//        int dx = Math.round(to.x - from.x);
+//        Log.d(TAG, String.valueOf(dx));
+//        int dy = Math.round(to.y - from.y);
+        FloatPoint fp = MovementRules.serverToLoomo(to.x - from.x,to.y - from.y,application.loomoMap.getCellSize());
+        int dx = Math.round(fp.x);
+        int dy = Math.round(fp.y);
         Log.d(TAG, "calculateLastLocation: " + dx + "  " + dy);
         Destination updatedLoc = new Destination();
         updatedLoc.x = application.lastKnownLocation.x + dx;

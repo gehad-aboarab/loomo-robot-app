@@ -1,5 +1,6 @@
 package cmp491.loomo_app.Helpers;
 
+import android.graphics.Point;
 import android.util.Log;
 
 import com.segway.robot.algo.Pose2D;
@@ -54,59 +55,98 @@ public class MovementRules {
         return dx;
     }
 
-    public static ArrayList<Destination> getObstacleLocation(float dir, int sensor){
-        ArrayList<Destination> res = new ArrayList<>();
+    public static ArrayList<Point> getObstacleLocation(float dir, int sensor){
+        ArrayList<Point> res = new ArrayList<>();
         switch(sensor) {
             case C.SENSOR_RIGHT:
+                Log.d(TAG, "Inside right sensor");
                 if (dir == C.DIRECTION_NORTH_EAST) {
-                    res.add(new Destination(0,-1));
-                    res.add(new Destination(-1,-1));
+                    res.add(new Point(0,-1));
+                    res.add(new Point(-1,-1));
                 } else if (dir == C.DIRECTION_NORTH) {
-                    res.add(new Destination(0,-1));
+                    res.add(new Point(0,-1));
                 } else if (dir == C.DIRECTION_NORTH_WEST) {
-                    res.add(new Destination(1,0));
-                    res.add(new Destination(1,-1));
+                    res.add(new Point(1,0));
+                    res.add(new Point(1,-1));
                 } else if (dir == C.DIRECTION_WEST) {
-                    res.add(new Destination(1,0));
+                    res.add(new Point(1,0));
                 } else if (dir == C.DEFAULT_FLOAT_VALUE) {
                 } else if (dir == C.DIRECTION_EAST) {
-                    res.add(new Destination(-1,0));
+                    res.add(new Point(-1,0));
                 } else if (dir == C.DIRECTION_SOUTH_WEST) {
-                    res.add(new Destination(1,1));
-                    res.add(new Destination(0,1));
+                    res.add(new Point(1,1));
+                    res.add(new Point(0,1));
                 } else if (dir == C.DIRECTION_SOUTH1) {
-                    res.add(new Destination(0,1));
+                    res.add(new Point(0,1));
                 } else {
-                    res.add(new Destination(-1,1));
-                    res.add(new Destination(-1,0));//
+                    res.add(new Point(-1,1));
+                    res.add(new Point(-1,0));//
                 }
                 break;
             case C.SENSOR_LEFT:
+                Log.d(TAG, "Inside left sensor");
                 if (dir == C.DIRECTION_NORTH_EAST) {
-                    res.add(new Destination(1,0));
-                    res.add(new Destination(1,1));
+                    res.add(new Point(1,0));
+                    res.add(new Point(1,1));
                 } else if (dir == C.DIRECTION_NORTH) {
-                    res.add(new Destination(0,1));
+                    res.add(new Point(0,1));
                 } else if (dir == C.DIRECTION_NORTH_WEST) {
-                    res.add(new Destination(0,1));
-                    res.add(new Destination(-1,1));
+                    res.add(new Point(0,1));
+                    res.add(new Point(-1,1));
                 } else if (dir == C.DIRECTION_WEST) {
-                    res.add(new Destination(-1,0));
+                    res.add(new Point(-1,0));
                 } else if (dir == C.DEFAULT_FLOAT_VALUE) {
                 } else if (dir == C.DIRECTION_EAST) {
-                    res.add(new Destination(1,0));
+                    res.add(new Point(1,0));
                 } else if (dir == C.DIRECTION_SOUTH_WEST) {
-                    res.add(new Destination(-1,0));
-                    res.add(new Destination(-1,-1));
+                    res.add(new Point(-1,0));
+                    res.add(new Point(-1,-1));
                 } else if (dir == C.DIRECTION_SOUTH1) {
-                    res.add(new Destination(0,-1));
+                    res.add(new Point(0,-1));
                 } else {
-                    res.add(new Destination(1,-1));
-                    res.add(new Destination(0,-1));
+                    res.add(new Point(1,-1));
+                    res.add(new Point(0,-1));
+                }
+                break;
+            case C.SENSOR_FRONT:
+                Log.d(TAG, "Inside front sensor");
+                if (dir == C.DIRECTION_NORTH_WEST) {
+                    res.add(new Point(1,0));
+                    res.add(new Point(0,1));
+                    res.add(new Point(1,1));
+                } else if (dir == C.DIRECTION_NORTH) {
+                    res.add(new Point(1,0));
+                    res.add(new Point(1,-1));
+                    res.add(new Point(1,1));
+                } else if (dir == C.DIRECTION_NORTH_EAST) {
+                    res.add(new Point(1,0));
+                    res.add(new Point(1,-1));
+                    res.add(new Point(0,-1));
+                } else if (dir == C.DIRECTION_WEST) {
+                    res.add(new Point(0,1));
+                    res.add(new Point(-1,1));
+                    res.add(new Point(1,1));
+                } else if (dir == C.DEFAULT_FLOAT_VALUE) {
+                } else if (dir == C.DIRECTION_EAST) {
+                    res.add(new Point(1,-1));
+                    res.add(new Point(1,-1));
+                    res.add(new Point(1,-1));
+                } else if (dir == C.DIRECTION_SOUTH_WEST) {
+                    res.add(new Point(0,1));
+                    res.add(new Point(-1,1));
+                    res.add(new Point(-1,0));
+                } else if (dir == C.DIRECTION_SOUTH1) {
+                    res.add(new Point(-1,1));
+                    res.add(new Point(-1,0));
+                    res.add(new Point(-1,-1));
+                } else {
+                    res.add(new Point(-1,-1));
+                    res.add(new Point(-1,0));
+                    res.add(new Point(0,-1));
                 }
                 break;
         }
-        return null;
+        return res;
     }
 
     public static Pose2D moveDirection(float direction, float MOVEMENT_UNIT, Pose2D loomoPosition){

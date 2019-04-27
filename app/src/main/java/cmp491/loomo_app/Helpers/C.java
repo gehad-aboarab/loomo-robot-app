@@ -123,11 +123,12 @@ public class C {
     // Sensors
     public static final int SENSOR_RIGHT =5890;
     public static final int SENSOR_LEFT =5891;
+    public static final int SENSOR_FRONT =5892;
 
     // RPi
-    public static float OBSTACLE_ULTRASONIC_DIST_MM = 1000.0f;
-    public static int OBSTACLE_COUNTER_FREQUENCY = 200;
-    public static int SLEEP_MM = 3000;
+    public static final float OBSTACLE_ULTRASONIC_DIST_MM = 1000.0f;
+    public static final int OBSTACLE_COUNTER_FREQUENCY = 200;
+    public static final long SLEEP_MM = 3000;
 
     public static final float DEFAULT_FLOAT_VALUE = 100000;
 
