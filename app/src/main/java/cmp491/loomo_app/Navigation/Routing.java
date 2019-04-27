@@ -114,7 +114,7 @@ public class Routing {
         }
 
         List<AStarCheckPoint> route = new ArrayList<>();
-
+        Log.d(TAG, "Journey type is: "+journeyType);
         // Calculating the route and setting it locally in this class
         if(journeyType == C.JOURNEY_GOING_TO_USER) {
             route = application.loomoMap.calcRoute(
@@ -194,5 +194,13 @@ public class Routing {
     private void updateUserAndLoomoUI(final int state, String message, String utteranceID){
         activity.loomoSpeakService.speak(message, utteranceID);
         activity.switchState(state);
+    }
+
+    public void turnRight(){
+
+    }
+
+    public void turnLeft(){
+
     }
 }

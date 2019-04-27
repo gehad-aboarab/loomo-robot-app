@@ -55,7 +55,7 @@ public class LoomoMain {
         this.loomoBaseService = new LoomoBaseService(application, baseListener);
         this.loomoSpeakService = new LoomoSpeakService(context, speakListener);
         this.loomoRecognitionService = new LoomoRecognitionService(context, recogListener);
-//        obstacleAvoidanceService = new ObstacleAvoidanceService();
+        obstacleAvoidanceService = new ObstacleAvoidanceService();
         if (application.mqttHelper.mqttAndroidClient.isConnected()) {
             getUpdatedMap();
         }
@@ -63,7 +63,7 @@ public class LoomoMain {
     }
 
     public void onStop() {
-//        obstacleAvoidanceService.cancel(true);
+        obstacleAvoidanceService.cancel(true);
     }
 
     // Gets the latest map JSON object, either from local storage or from server
@@ -93,16 +93,16 @@ public class LoomoMain {
                 case C.CALLBACK_BIND:
                     loomoBaseService.setControlMode(Base.CONTROL_MODE_NAVIGATION);
                     loomoBaseService.startVLSNavigation();
-//                    if (!loomoBaseService.isObstacleDetectionStarted()) {
-//                        loomoBaseService.setObstacleDetection(true);
-//                    }
-//                    loomoBaseService.setObstacleDetectionDistance(0.25f);
-//                    loomoBaseService.setObstacleListener();
+                    if (!loomoBaseService.isObstacleDetectionStarted()) {
+                        loomoBaseService.setObstacleDetection(true);
+                    }
+                    loomoBaseService.setObstacleDetectionDistance(0.25f);
+                    loomoBaseService.setObstacleListener();
                     break;
                 case C.CALLBACK_VLS_START:
                     // connect to obstacleAvoid service
-//                    if (!obstacleAvoidanceService.isCancelled())
-//                        obstacleAvoidanceService.execute(loomoBaseService, application, loomoSpeakService);
+                    if (!obstacleAvoidanceService.isCancelled())
+                        obstacleAvoidanceService.execute(loomoBaseService, application, loomoSpeakService);
                     loomoBaseService.cleanAndResetOriginalPose();
                     break;
                 case C.CALLBACK_CHECKPOINT_ARRIVED:
@@ -250,13 +250,12 @@ public class LoomoMain {
 //                    startJourney(Route.JOURNEY_GOING_TO_USER);
                 }
                 if (topic.equals(C.S2L_RPI_SENSOR)) {
-//                    Log.d(TAG, "messageArrived: hiiiiiiiiiiiiiiiiiii");
-//                    application.rpiSensorFront = true;
+                    application.rpiSensorFront = true;
 //                } else if (topic.equalsIgnoreCase(C.S2L_RESET)) {
 //                    resetLoomo();
                 } else if (topic.equalsIgnoreCase(C.S2L_RESET_MAP)) {
 //                    Log.d(TAG, "messageArrived: reset");
-//                    getUpdatedMap();
+                    getUpdatedMap();
                 }
                 // To check if the message is meant for this loomo only or not
                 if (obj.getString("loomoID").equals(application.deviceId)) {

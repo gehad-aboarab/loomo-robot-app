@@ -149,5 +149,5 @@ public class C {
         }
     }
 
-    public static final String intModeToString(int mode){ return new String[]{"ride","guide","tour"}[mode]; }
+    public static final String intModeToString(int mode){ return new String[]{"guide","ride","tour"}[mode]; }
 }

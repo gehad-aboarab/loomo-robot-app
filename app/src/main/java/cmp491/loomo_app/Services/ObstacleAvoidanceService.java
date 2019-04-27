@@ -15,7 +15,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class ObstacleAvoidanceService extends AsyncTask<Object, Void, Float> {
-    private final String TAG = "ObstacleAvoidanceService_Tag";
+    private final static String TAG = "ObstacleAvoidance_Tag";
     private boolean i = true;
     private LoomoBaseService loomoBaseService;
     private LoomoSpeakService loomoSpeakService;
@@ -44,6 +44,7 @@ public class ObstacleAvoidanceService extends AsyncTask<Object, Void, Float> {
     protected void onPreExecute() {
         i = true;
         counter = new Counter();
+        counter.count = 1;
         counter.frequency = C.OBSTACLE_COUNTER_FREQUENCY;
         Log.d(TAG, "onPreExecute: ");
         super.onPreExecute();
@@ -61,23 +62,34 @@ public class ObstacleAvoidanceService extends AsyncTask<Object, Void, Float> {
                 break;
             }
             ultrasonicValue = getAvgUltrasonicValue();
-            Log.d(TAG, String.valueOf(ultrasonicValue));
             if (loomoApplication.currentRoute.isStarted() && (ultrasonicValue < C.OBSTACLE_ULTRASONIC_DIST_MM || loomoApplication.rpiSensorFront)) {
                 ultrasonicValue = getAvgUltrasonicValue();
+                // If value is less than threshold
                 if (ultrasonicValue < C.OBSTACLE_ULTRASONIC_DIST_MM || loomoApplication.rpiSensorFront) {
+                    if (ultrasonicValue < 270.0) {
+                        loomoSpeakService.speak("Somebody help me. I cannot move", "");
+                    }
+                    // Clear the checkpoints
                     loomoBaseService.clearCheckPoints();
+                    // Place obstacle at the checkpoint the robot was heading to
                     AStarCheckPoint to = loomoApplication.currentRoute.getCurrentCheckPoint();
-                    AStarCheckPoint from = new AStarCheckPoint(loomoApplication.lastKnownLocation.x, loomoApplication.lastKnownLocation.y, true);
+                    Log.d(TAG, "Next checkpoint: "+to.getX()+","+to.getY());
                     loomoApplication.loomoMap.addLandmark(C.LANDMARK_TEMP_OBSTACLE, to.getX(), to.getY());
+
+                    // Find out which checkpoint we are currently at
+                    AStarCheckPoint from = new AStarCheckPoint(loomoApplication.lastKnownLocation.x, loomoApplication.lastKnownLocation.y, true);
+                    Log.d(TAG, "Current checkpoint: "+from.getX()+","+from.getY());
+
+                    // Turn right and check for obstacles
+//                    loomoApplication.currentRoute.turnRight();
+                    // Turn left and check for obstacles
+//                    loomoApplication.currentRoute.turnLeft();
 //                    C.log(loomoApplication.mqttHelper.mqttAndroidClient,C.L2S_ADMIN_LOG,"gotta make new route to: "+to.getX()+to.getY());
                     publishProgress();
+                    threadSleep(3000);
                 }
-                threadSleep(C.SLEEP_MM);
                 ultrasonicValue = getAvgUltrasonicValue();
                 loomoApplication.rpiSensorFront = false;
-                if (ultrasonicValue < 270.0) {
-                    loomoSpeakService.speak("Somebody help me. I cannot move", "");
-                }
             }
 //            if (loomoApplication.currentRoute.isStarted()){// && (loomoApplication.rpiSensorLeft || loomoApplication.rpiSensorRight)) {
 //                AStarCheckPoint to = loomoApplication.currentRoute.getCurrentCheckPoint();
@@ -108,9 +120,11 @@ public class ObstacleAvoidanceService extends AsyncTask<Object, Void, Float> {
     @Override
     protected void onProgressUpdate(Void... aVoid) {
         super.onProgressUpdate();
-        Log.d(TAG, "obtc6:  ");
+        Log.d(TAG, "Starting journey to new route!");
 //        C.log(loomoApplication.mqttHelper.mqttAndroidClient,C.L2S_ADMIN_LOG,"Journey type is: "+loomoApplication.currentRoute.getJOURNEY_TYPE());
-        loomoApplication.currentRoute.startJourney(loomoApplication.currentRoute.getJourneyType());
+        loomoApplication.currentRoute.setStarted(false);
+        if(loomoApplication.currentRoute.getJourneyType()!=-1)
+            loomoApplication.currentRoute.startJourney(loomoApplication.currentRoute.getJourneyType());
     }
 
     @Override
