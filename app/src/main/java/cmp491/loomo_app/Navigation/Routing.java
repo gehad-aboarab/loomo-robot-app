@@ -152,7 +152,7 @@ public class Routing {
             logging.append(checkpoint.getX() + ", " + checkpoint.getY() + "\n");
         }
         Log.d(TAG, "startJourney: " + logging);
-
+        application.rpiSensorFront = false;
         moveToNextCheckpoint(from);
         setStarted(true);
     }
@@ -162,9 +162,13 @@ public class Routing {
         application.updateLocation(from);
         try {
             currentCheckPoint = getNextCheckPoint();
+
             FloatPoint fp_target = MovementRules.serverToLoomo(currentCheckPoint.getX(), currentCheckPoint.getY(), application.loomoMap.getCellSize());
             FloatPoint fp_home = MovementRules.serverToLoomo(application.homeDestination.x, application.homeDestination.y, application.loomoMap.getCellSize());
-            activity.loomoBaseService.moveRobot((float) fp_target.x - fp_home.x, (float) fp_target.y - fp_home.y);
+            if(fp_target.x-fp_home.x==0&&fp_target.y-fp_home.y==0){
+                activity.loomoBaseService.moveRobot((float) fp_target.x - fp_home.x, (float) fp_target.y - fp_home.y,0);
+            }else
+                activity.loomoBaseService.moveRobot((float) fp_target.x - fp_home.x, (float) fp_target.y - fp_home.y);
         } catch (Exception e) {
             e.printStackTrace();
             if(getJourneyType() == C.JOURNEY_DOING_TOUR){

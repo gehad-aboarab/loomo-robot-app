@@ -64,6 +64,8 @@ public class ObstacleAvoidanceService extends AsyncTask<Object, Void, Float> {
             }
             ultrasonicValue = getAvgUltrasonicValue();
             if (loomoApplication.currentRoute.isStarted() && (ultrasonicValue < C.OBSTACLE_ULTRASONIC_DIST_MM || loomoApplication.rpiSensorFront)) {
+//                loomoApplication.rpiSensorFront = false;
+                threadSleep(200);
                 ultrasonicValue = getAvgUltrasonicValue();
                 // If value is less than threshold
                 if (ultrasonicValue < C.OBSTACLE_ULTRASONIC_DIST_MM || loomoApplication.rpiSensorFront) {

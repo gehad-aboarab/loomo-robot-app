@@ -21,7 +21,7 @@ public class MqttHelper {
     String clientId;
     private final String subscriptionTopic = "server-to-loomo/#";
     private final String username = "gwvgvrbb";
-    private final String password = "HoftA-90m-BL";
+    private final String password = "wXceccuc0Rqb";
     private final String TAG = "MqttHelper_Tag";
     private Context context;
 

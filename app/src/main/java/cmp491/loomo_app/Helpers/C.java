@@ -80,9 +80,7 @@ public class C {
     public final static int CALLBACK_SPEAK_DONE = 5019;
 
     // Landmark types
-    public final static int LANDMARK_DOOR = 24;
     public final static int LANDMARK_FREE = 3;
-    public final static int LANDMARK_BEACON = 25;
     public final static int LANDMARK_OBSTACLE = 26;
     public final static int LANDMARK_OTHER = 27;
     public final static int LANDMARK_HOME = 28;
@@ -126,7 +124,7 @@ public class C {
     public static final int SENSOR_FRONT =5892;
 
     // RPi
-    public static final float OBSTACLE_ULTRASONIC_DIST_MM = 1000.0f;
+    public static final float OBSTACLE_ULTRASONIC_DIST_MM = 800.0f;
     public static final int OBSTACLE_COUNTER_FREQUENCY = 200;
     public static final long SLEEP_MM = 3000;
 

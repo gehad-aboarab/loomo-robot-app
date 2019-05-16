@@ -149,8 +149,14 @@ public class LoomoMain {
                     } else if ((int) params[1] >= 50) {
                         if (Arrays.asList(C.DISMISS_RECOG_LIST).contains((String) params[0]))
                             mqttDismissLoomo(true);
-                        else if (Arrays.asList(C.START_JOUR_RECOG_LIST).contains((String) params[0]))
-                            mqttStartJourney();
+                        else if (Arrays.asList(C.START_JOUR_RECOG_LIST).contains((String) params[0])) {
+                            if(application.currentState==C.BOUND_JOURNEY_STARTABLE) {
+                                application.updateCurrentState(C.BOUND_ONGOING_JOURNEY);
+                                mqttStartJourney();
+                            }else {
+                                loomoSpeakService.speak("Sorry I cannot start a journey right now", "");
+                            }
+                        }
                         else
                             loomoSpeakService.speak("You have said an invalid command", C.UTTERANCE_RECOG_ERROR);
                     } else
@@ -176,6 +182,7 @@ public class LoomoMain {
                     Log.d(TAG, "Speak unbinded");
                     break;
                 case C.CALLBACK_TTS_INIT:
+                    loomoSpeakService.setSpeechRate(0.95f);
                     Log.d(TAG, "Speak initialized");
                     break;
                 case C.CALLBACK_SPEAK_STARTED:
@@ -263,7 +270,6 @@ public class LoomoMain {
                         // Server is sending map
                         case C.S2L_SEND_MAP:
                             boolean isUpdated = obj.getBoolean("updated");
-
                             // If map is updated, store it in shared prefs
                             if (Boolean.valueOf(isUpdated)) {
                                 application.updateMap(obj.getJSONObject("map").toString());
@@ -276,7 +282,9 @@ public class LoomoMain {
                             // Set home destination and update it in shared prefs
                             application.homeDestination = mapInitializer.getHomeDestination();
                             application.updateHomeLocation(application.homeDestination);
-
+                            //reset last known poisition and state
+                            application.updateCurrentState(C.UNBOUND_AVAILABLE);
+                            application.updateLocation(application.homeDestination);
                             break;
                         case C.S2L_SEND_TOUR:
                             try {
